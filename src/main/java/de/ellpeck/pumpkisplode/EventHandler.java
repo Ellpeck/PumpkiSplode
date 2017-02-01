@@ -25,11 +25,11 @@ public class EventHandler{
     @SubscribeEvent
     public void onLivingUpdate(LivingEvent.LivingUpdateEvent event){
         EntityLivingBase eventity = event.getEntityLiving();
-        if(!eventity.worldObj.isRemote && eventity instanceof EntityVillager){
+        if(!eventity.world.isRemote && eventity instanceof EntityVillager){
             EntityVillager villager = (EntityVillager)eventity;
 
             if(!villager.isDead && !villager.isChild()){
-                EntityPlayer player = villager.worldObj.getClosestPlayerToEntity(villager, 3.0F);
+                EntityPlayer player = villager.world.getClosestPlayerToEntity(villager, 3.0F);
                 if(player != null){
                     ItemStack stack = player.inventory.armorInventory[3];
                     if(stack != null && stack.getItem() == Item.getItemFromBlock(Blocks.PUMPKIN)){
@@ -50,7 +50,7 @@ public class EventHandler{
                 if(ray != null){
                     BlockPos pos = ray.getBlockPos();
                     if(pos != null){
-                        IBlockState state = villager.worldObj.getBlockState(pos);
+                        IBlockState state = villager.world.getBlockState(pos);
                         if(state.getBlock() == Blocks.PUMPKIN){
                             EnumFacing rotation = state.getValue(BlockPumpkin.FACING);
                             if(rotation == ray.sideHit){
@@ -65,7 +65,7 @@ public class EventHandler{
 
     private static void explodeVillager(EntityVillager villager){
         Random rand = villager.getRNG();
-        villager.worldObj.createExplosion(null, villager.posX, villager.posY, villager.posZ, rand.nextFloat()*3F+1F, true);
+        villager.world.createExplosion(null, villager.posX, villager.posY, villager.posZ, rand.nextFloat()*3F+1F, true);
         villager.setDead();
 
         if(rand.nextFloat() >= 0.25F){
